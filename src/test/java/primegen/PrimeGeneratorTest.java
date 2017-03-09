@@ -1,14 +1,35 @@
 package primegen;
 
+import com.github.approval.Approval;
+import com.github.approval.converters.Converters;
+import com.github.approval.converters.ListConverter;
+import com.github.approval.pathmappers.JunitPathMapper;
+import com.github.approval.reporters.Reporters;
+import org.junit.Rule;
 import org.junit.Test;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class PrimeGeneratorTest {
+    private final Path PARENT_PATH = Paths.get("src/test/resources");
+
+    @Rule
+    public JunitPathMapper pathMapper = new JunitPathMapper(PARENT_PATH);
+
+    private Approval<List<String>> APPROVAL = Approval
+            .of(List.class)
+            .withPathMapper(pathMapper)
+            .withReporter(Reporters.console())
+            .withConveter(new ListConverter(Converters.STRING)).build();
 
     @Test
-    public void testPrimes() {
+    public void should_generate_primes() {
         int[] nullArray = new PrimeGenerator().generatePrimes(0);
         assertEquals(0, nullArray.length);
 
@@ -20,32 +41,16 @@ public class PrimeGeneratorTest {
         assertEquals(2, threeArray.length);
         assertEquals(2, threeArray[0]);
         assertEquals(3, threeArray[1]);
-
-        int[] centArray = new PrimeGenerator().generatePrimes(100);
-        assertEquals(25, centArray.length);
-        assertEquals(97, centArray[24]);
-
     }
 
     @Test
-    public void testExhaustive() {
-        for (int i = 2; i < 500; i++) {
-            verifyPrimeList(new PrimeGenerator().generatePrimes(i));
+    public void should_generate_primes_from_0_to_500() {
+        List<String> actual = new ArrayList<>();
+        for (int i = 0; i <= 500; i++) {
+            int[] primes = new PrimeGenerator().generatePrimes(i);
+            actual.add(Arrays.toString(primes));
         }
-
-    }
-
-    private void verifyPrimeList(int[] list) {
-        for (int i = 0; i < list.length; i++) {
-            verifyPrime(list[i]);
-        }
-
-    }
-
-    private void verifyPrime(int n) {
-        for (int factor = 2; factor < n; factor++) {
-            assertTrue(n % factor != 0);
-        }
+        APPROVAL.verify(actual, Paths.get("0 to 500"));
     }
 
 }
