@@ -26,7 +26,8 @@ public class PrimeGeneratorTest {
             .of(List.class)
             .withPathMapper(pathMapper)
             .withReporter(Reporters.console())
-            .withConveter(new ListConverter(Converters.STRING)).build();
+            .withConveter(new ListConverter(Converters.STRING))
+            .build();
 
     @Test
     public void should_generate_primes() {
