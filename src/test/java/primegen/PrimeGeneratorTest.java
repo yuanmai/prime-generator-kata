@@ -2,7 +2,6 @@ package primegen;
 
 import com.github.approval.Approval;
 import com.github.approval.converters.Converters;
-import com.github.approval.converters.ListConverter;
 import com.github.approval.pathmappers.JunitPathMapper;
 import com.github.approval.reporters.Reporters;
 import org.junit.Rule;
