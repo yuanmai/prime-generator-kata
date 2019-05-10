@@ -15,6 +15,7 @@ package primegen;
  */
 
 public class PrimeGenerator {
+
     /**
      * @param maxValue is the generation limit
      * @return
@@ -60,4 +61,5 @@ public class PrimeGenerator {
             return new int[0]; // return null array if bad input.
         }
     }
+
 }
